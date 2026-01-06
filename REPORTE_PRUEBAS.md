@@ -3,10 +3,47 @@
 **Fecha del Informe:** 05 de Enero, 2026
 **Estado General:** ✅ APROBADO (12/12 Pruebas Exitosas)
 **Herramienta de Testing:** Bun Test Runner v1.3.5
+**Duración Total:** 4.93s
+**Aserciones Verificadas:** 37 verificaciones (expects)
 
-## 1. Resumen de Ejecución Técnica
+## 1. Resumen Ejecutivo
+Se ha ejecutado la suite completa de pruebas unitarias y de integración del sistema "Order Management MVP". El objetivo ha sido validar la lógica de negocio crítica antes del despliegue. Todas las pruebas han pasado satisfactoriamente, asegurando la estabilidad de los módulos de Autenticación, Pedidos y Productos.
 
-A continuación se detalla la salida cruda de la ejecución de la suite de pruebas automatizadas:
+## 2. Detalle de Ejecución por Módulo
+
+A continuación se presenta el análisis detallado de cada suite de pruebas ejecutada:
+
+### 2.1 Módulo de Autenticación y Seguridad
+**Archivos:** `src/__tests__\schemas\login.schema.test.ts`, `src/__tests__\services\auth.service.test.ts`
+
+Este módulo es crítico para la seguridad del usuario. Se realizaron 6 pruebas enfocadas en:
+- **Validación de Entradas (Zod Schema):**
+    - `should validate correct credentials`: Confirma que emails y contraseñas válidos son aceptados.
+    - `should reject invalid email`: Verifica que el sistema rechaza formatos de correo incorrectos (ej. sin '@'), previniendo errores en backend.
+    - `should reject short password`: Asegura que se cumpla la política de longitud mínima (6 caracteres).
+- **Lógica de Servicio (Auth Service):**
+    - `should login with correct specific credentials`: Simula un login exitoso con usuario real, verificando tiempo de respuesta (~1s).
+    - `should fail with incorrect password`: Verifica que el sistema maneje intentos fallidos de manera segura.
+
+### 2.2 Módulo de Gestión de Pedidos (Core Business)
+**Archivo:** `src/__tests__\services\orders.service.test.ts`
+
+Representa el núcleo transaccional. Se verificaron 4 escenarios críticos:
+- **Integridad Financiera:**
+    - `should calculate total correctly`: Prueba matemática pura. Verifica que (Cantidad × Precio) se sume correctamente para múltiples ítems.
+    - `should calculate total for empty cart`: Caso borde para asegurar que un carrito vacío suma 0.
+- **Persistencia y Reglas:**
+    - `should create order successfully and persist`: Valida el ciclo completo de creación de una orden y su guardado en almacenamiento local (simulando persistencia en DB).
+    - `should throw error for empty order`: Regla de negocio que impide crear pedidos sin productos.
+
+### 2.3 Módulo de Catálogo de Productos
+**Archivo:** `src/__tests__\services\products.service.test.ts`
+
+Verifica la disponibilidad de datos para el usuario final.
+- `should fetch products info`: Asegura que el servicio retorne la lista de productos correctamente (~800ms de latencia simulada).
+- `should have valid stock statuses`: Auditoría de datos para asegurar que todos los productos tengan estados de stock válidos ('in-stock', 'low-stock', 'out-of-stock').
+
+## 3. Salida de Ejecución Técnica (Log)
 
 ```console
 bun test v1.3.5 (1e86cebd)
@@ -37,42 +74,20 @@ src\__tests__\services\products.service.test.ts:
 Ran 12 tests across 4 files. [4.93s]
 ```
 
-## 2. Validación de Historias de Usuario
+## 4. Matriz de Cobertura de Historias de Usuario
 
-La ejecución exitosa de estas pruebas confirma el cumplimiento de los criterios de aceptación para las siguientes historias:
+Relación directa entre las pruebas ejecutadas y los requisitos del negocio.
 
-### HU-01: Inicio de Sesión
-**Objetivo:** Permitir acceso seguro y validar credenciales.
+| Historia de Usuario | Prueba(s) Clave | Resultado | Validación de Negocio |
+|:---|:---|:---:|:---|
+| **HU-01: Inicio de Sesión** | `should login with correct...`<br>`should reject invalid email` | ✅ PASS | El usuario puede entrar solo con credenciales válidas y formato correcto. |
+| **HU-02: Consulta Productos** | `should fetch products info`<br>`should have valid stock...` | ✅ PASS | El catálogo carga correctamente y muestra stocks coherentes para decisión de compra. |
+| **HU-03: Creación Pedido** | `should calculate total...`<br>`create order successfully` | ✅ PASS | El cálculo de dinero es exacto y la orden se guarda en el historial del usuario. |
 
-| Prueba Ejecutada | Criterio de Aceptación Validado |
-|:---|:---|
-| `should validate correct credentials` | El sistema permite el acceso con credenciales válidas. |
-| `should fail with incorrect password` | Se muestra/lanza un error con credenciales inválidas. |
-| `should reject invalid email` | Validación de formato antes de enviar al servidor. |
-| `should reject short password` | Validación de seguridad mínima en campos. |
+## 5. Conclusión y Recomendaciones
 
-### HU-02: Consulta de Productos
-**Objetivo:** Listar productos con información correcta de precio y disponibilidad.
+El sistema es estable y cumple con los requisitos funcionales definidos.
+- **Rendimiento:** Los tiempos de respuesta de los servicios simulados (Auth ~1s, Products ~0.8s) están dentro de lo esperado para pruebas de integración de componentes asíncronos.
+- **Calidad:** 0 fallos detectados en flujos críticos.
 
-| Prueba Ejecutada | Criterio de Aceptación Validado |
-|:---|:---|
-| `should fetch products info` | Se muestran todos los productos activos con sus propiedades (ID, Nombre, Precio). |
-| `should have valid stock statuses` | Cada producto muestra disponibilidad válida ('in-stock', 'low-stock', 'out-of-stock'). |
-
-### HU-03: Creación de Pedido
-**Objetivo:** Permitir la compra y cálculo de totales.
-
-| Prueba Ejecutada | Criterio de Aceptación Validado |
-|:---|:---|
-| `should calculate total correctly` | El total del pedido se calcula correctamente (Suma de Precio x Cantidad). |
-| `should throw error for empty order` | El pedido se crea **solo** si hay productos seleccionados. |
-| `should create order successfully and persist` | El pedido queda asociado al usuario y se guarda en el historial. |
-
-## 3. Conclusión del Sprint de Pruebas
-
-El sistema ha superado las pruebas "Happy Path" (flujos exitosos) y "Edge Cases" (validaciones de error) definidos para este MVP.
-- **Integridad de Datos:** Verificada (Cálculos de dinero y estructuras de datos).
-- **Seguridad Básica:** Verificada (Validación de inputs).
-- **Persistencia:** Verificada (Simulación de base de datos/localStorage).
-
-Se recomienda proceder al despliegue en entorno de Staging/QA.
+**Próximo paso:** Aprobar Pull Request y desplegar a entorno de pruebas (QA).
