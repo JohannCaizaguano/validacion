@@ -1,18 +1,10 @@
 "use client"
 
-import { CartItem } from "@/types";
-
-export interface Order {
-    id: string;
-    items: CartItem[];
-    total: number;
-    date: string;
-    status: 'completed' | 'pending' | 'cancelled';
-}
+import { CartItem, Order } from "@/types";
 
 const ORDERS_KEY = 'orders_history';
 
-export const OrdersService = {
+export const ordersService = {
     getOrders: (): Order[] => {
         if (typeof window === 'undefined') return [];
         const stored = localStorage.getItem(ORDERS_KEY);
@@ -23,18 +15,33 @@ export const OrdersService = {
         }
     },
 
-    createOrder: (items: CartItem[], total: number) => {
+    calculateTotal: (items: CartItem[]): number => {
+        return items.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+    },
+
+    createOrder: (userId: string, items: CartItem[]): Order => {
+        if (items.length === 0) {
+            throw new Error("El pedido debe contener al menos un producto");
+        }
+
+        const total = ordersService.calculateTotal(items);
+
         const newOrder: Order = {
             id: `ORD-${Date.now().toString().slice(-6)}`,
+            userId,
             items,
             total,
-            date: new Date().toISOString(),
-            status: 'completed'
+            date: new Date(),
+            status: 'confirmed'
         };
 
-        const currentOrders = OrdersService.getOrders();
+        const currentOrders = ordersService.getOrders();
         const updatedOrders = [newOrder, ...currentOrders];
-        localStorage.setItem(ORDERS_KEY, JSON.stringify(updatedOrders));
+        
+        if (typeof window !== 'undefined') {
+            localStorage.setItem(ORDERS_KEY, JSON.stringify(updatedOrders));
+        }
+        
         return newOrder;
     }
 };

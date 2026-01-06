@@ -21,3 +21,14 @@ cd Nose
 bun install
 bun run dev
 ```
+
+## 4. Ejecutar Pruebas
+
+El proyecto incluye una suite de pruebas automatizadas para validar las Historias de Usuario (HU).
+
+```bash
+bun test
+```
+
+Para ver el detalle completo de la última ejecución y cómo cada prueba valida los requisitos del negocio, consulta el archivo [REPORTE_PRUEBAS.md](./REPORTE_PRUEBAS.md).
+

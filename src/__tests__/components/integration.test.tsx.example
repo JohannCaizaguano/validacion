@@ -1,0 +1,72 @@
+// Ejemplos de Pruebas de Componentes e Integración (Requiere @testing-library/react y happy-dom/jsdom)
+
+// Test para HU-02: Product Card Integration
+/*
+import { render, screen, fireEvent } from '@testing-library/react';
+import { ProductCard } from '@/components/products/product-card';
+import { Product } from '@/types';
+
+// Mock del carrito para verificar integración
+const mockAddToCart = jest.fn();
+jest.mock('@/hooks/use-cart', () => ({
+    useCart: () => ({ addToCart: mockAddToCart })
+}));
+
+describe('ProductCard Component', () => {
+    const mockProduct: Product = {
+        id: '1',
+        name: 'Manzana',
+        price: 1.50,
+        stock: 'in-stock',
+        description: 'Test desc'
+    };
+
+    test('renders product information correctly', () => {
+        render(<ProductCard product={mockProduct} />);
+        
+        expect(screen.getByText('Manzana')).toBeInTheDocument();
+        expect(screen.getByText('$1.50')).toBeInTheDocument();
+        expect(screen.getByText('Test desc')).toBeInTheDocument();
+    });
+
+    test('disables button when out of stock', () => {
+        const outStockProduct = { ...mockProduct, stock: 'out-of-stock' as const };
+        render(<ProductCard product={outStockProduct} />);
+        
+        const button = screen.getByRole('button', { name: /agotado/i });
+        expect(button).toBeDisabled();
+    });
+
+    test('calls addToCart when clicked', () => {
+        render(<ProductCard product={mockProduct} />);
+        
+        const button = screen.getByRole('button', { name: /agregar/i });
+        fireEvent.click(button);
+        
+        expect(mockAddToCart).toHaveBeenCalledWith(mockProduct);
+    });
+});
+*/
+
+// Test para HU-01: Login Form Integration
+/*
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import LoginPage from '@/app/login/page';
+import { AuthProvider } from '@/hooks/use-auth';
+
+describe('Login Flow', () => {
+    test('shows error on invalid submission', async () => {
+        render(
+            <AuthProvider>
+                <LoginPage />
+            </AuthProvider>
+        );
+
+        fireEvent.click(screen.getByRole('button', { name: /ingresar/i }));
+
+        await waitFor(() => {
+            expect(screen.getByText(/correo electrónico inválido/i)).toBeInTheDocument();
+        });
+    });
+});
+*/
