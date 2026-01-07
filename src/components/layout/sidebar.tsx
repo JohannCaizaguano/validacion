@@ -1,6 +1,9 @@
-"use client"
+import { categoriesService } from "@/services/categories.service";
+import Link from "next/link";
 
-export function Sidebar() {
+export async function Sidebar() {
+    const categories = await categoriesService.getCategories();
+
     return (
         <aside className="hidden md:flex w-64 flex-col border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-y-auto no-scrollbar h-full">
             <div className="p-4 flex flex-col h-full">
@@ -10,22 +13,16 @@ export function Sidebar() {
                         <p className="text-slate-500 dark:text-slate-400 text-xs font-normal leading-normal">Filtrar catálogo por tipo</p>
                     </div>
                     <div className="flex flex-col gap-1">
-                        <button className="group flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/10 text-primary hover:bg-primary/20 transition-all text-left">
+                        <Link href="/" className="group flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/10 text-primary hover:bg-primary/20 transition-all text-left">
                             <span className="material-symbols-outlined icon-fill">grid_view</span>
                             <span className="text-sm font-bold leading-normal">Todos</span>
-                        </button>
-                        <button className="group flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 transition-all text-left">
-                            <span className="material-symbols-outlined">nutrition</span>
-                            <span className="text-sm font-medium leading-normal">Frutas</span>
-                        </button>
-                        <button className="group flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 transition-all text-left">
-                            <span className="material-symbols-outlined">eco</span>
-                            <span className="text-sm font-medium leading-normal">Verduras</span>
-                        </button>
-                        <button className="group flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 transition-all text-left">
-                            <span className="material-symbols-outlined">devices</span>
-                            <span className="text-sm font-medium leading-normal">Tecnología</span>
-                        </button>
+                        </Link>
+                        {categories.map((category) => (
+                            <Link key={category.id} href={`/?category=${category.slug}`} className="group flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 transition-all text-left">
+                                <span className="material-symbols-outlined">label</span>
+                                <span className="text-sm font-medium leading-normal">{category.name}</span>
+                            </Link>
+                        ))}
                     </div>
                 </div>
                 <div className="mt-auto border-t border-slate-200 dark:border-slate-800 pt-6">
@@ -36,11 +33,11 @@ export function Sidebar() {
                         </div>
                         <div className="flex justify-between items-center text-sm">
                             <span className="text-slate-500 dark:text-slate-400">Total Items</span>
-                            <span className="font-bold text-slate-900 dark:text-white">6</span>
+                            <span className="font-bold text-slate-900 dark:text-white">-</span>
                         </div>
                         <div className="flex justify-between items-center text-sm">
                             <span className="text-slate-500 dark:text-slate-400">Bajo Stock</span>
-                            <span className="font-bold text-orange-500">2</span>
+                            <span className="font-bold text-orange-500">-</span>
                         </div>
                     </div>
                 </div>

@@ -11,6 +11,8 @@ export interface Product {
     stock: 'in-stock' | 'low-stock' | 'out-of-stock';
     description?: string;
     image?: string;
+    imageUrl?: string | null;
+    category?: { name: string; slug: string } | null;
 }
 
 export interface CartItem extends Product {

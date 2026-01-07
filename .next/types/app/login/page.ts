@@ -1,4 +1,4 @@
-// File: D:\Andres Romero\Escritorio\Proyecto\Validacion\validacion\src\app\login\page.tsx
+// File: C:\Users\Johann\Desktop\Octavo\Verficacion y validacion de software\Fin de Ciclo\Nose\src\app\login\page.tsx
 import * as entry from '../../../../src/app/login/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

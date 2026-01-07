@@ -26,11 +26,21 @@ export function ProductCard({ product }: ProductCardProps) {
         <div className={`group bg-white dark:bg-slate-900 rounded-xl overflow-hidden border border-slate-100 dark:border-slate-800 hover:shadow-xl hover:border-primary/20 dark:hover:border-primary/20 transition-all duration-300 flex flex-col ${isOutOfStock ? 'opacity-80 hover:opacity-100 bg-slate-50' : ''}`}>
             <div className={`relative w-full aspect-square bg-slate-100 dark:bg-slate-800 overflow-hidden ${isOutOfStock ? 'grayscale' : ''}`}>
                 {product.image ? (
-                    <img
-                        alt={product.name}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                        src={product.image}
-                    />
+                    <div className="relative w-full h-full">
+                        <img
+                            alt={product.name}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            src={product.image}
+                            onError={(e) => {
+                                e.currentTarget.style.display = 'none';
+                                e.currentTarget.parentNode?.querySelector('.fallback')?.classList.remove('hidden');
+                            }}
+                        />
+                        {/* Fallback shown on error */}
+                        <div className="fallback invisible absolute inset-0 flex items-center justify-center text-slate-400 bg-slate-100 dark:bg-slate-800">
+                            <span className="material-symbols-outlined text-4xl">image_not_supported</span>
+                        </div>
+                    </div>
                 ) : (
                     <div className="flex h-full items-center justify-center text-slate-400">
                         <span className="material-symbols-outlined text-4xl">image_not_supported</span>
@@ -76,8 +86,8 @@ export function ProductCard({ product }: ProductCardProps) {
                         onClick={handleAddToCart}
                         disabled={isOutOfStock}
                         className={`flex items-center justify-center size-9 rounded-lg transition-colors ${isOutOfStock
-                                ? 'bg-slate-100 dark:bg-slate-800 text-slate-300 cursor-not-allowed'
-                                : 'bg-slate-100 dark:bg-slate-800 text-primary hover:bg-primary hover:text-white'
+                            ? 'bg-slate-100 dark:bg-slate-800 text-slate-300 cursor-not-allowed'
+                            : 'bg-slate-100 dark:bg-slate-800 text-primary hover:bg-primary hover:text-white'
                             }`}
                     >
                         <span className="material-symbols-outlined text-[20px]">

@@ -10,7 +10,10 @@ export function Header() {
     const { itemCount } = useCart();
 
     return (
-        <header className="flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-6 py-3 z-20 shadow-sm sticky top-0">
+        <header
+            suppressHydrationWarning
+            className="flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-6 py-3 z-20 shadow-sm sticky top-0"
+        >
             <div className="flex items-center gap-8">
                 <div className="flex items-center gap-3 text-slate-900 dark:text-white">
                     <div className="flex items-center justify-center bg-primary/10 p-2 rounded-lg text-primary">
@@ -56,7 +59,7 @@ export function Header() {
 
                 <div
                     className="bg-center bg-no-repeat bg-cover rounded-full size-10 ring-2 ring-white dark:ring-slate-800 cursor-pointer"
-                    style={{ backgroundImage: `url("https://ui-avatars.com/api/?name=${user?.name || 'User'}&background=136dec&color=fff")` }}
+                    style={{ backgroundImage: `url("https://ui-avatars.com/api/?name=${user?.user_metadata?.full_name || user?.email || 'User'}&background=136dec&color=fff")` }}
                     onClick={logout}
                     title="Cerrar Sesión"
                 ></div>
