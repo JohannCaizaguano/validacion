@@ -95,14 +95,7 @@ prisma/
 └── seed.js             # Script de datos de prueba
 ```
 
-## Funcionalidades
 
-- ✅ Catálogo de productos con imágenes
-- ✅ Filtrado por categorías
-- ✅ Carrito de compras
-- ✅ Autenticación con Supabase
-- ✅ Dashboard de administración
-- ✅ Diseño responsive
 
 ## Documentación Adicional
 
